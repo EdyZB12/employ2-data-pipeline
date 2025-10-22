@@ -3,6 +3,7 @@
 A complete Dockerized ETL pipeline for processing and analyzing 
 government employee data 
 
+
 ##Feature 
 
 - **End-to-End ETL**: CSV to PostgresSQL data pipeline
@@ -29,5 +30,3 @@ docker-compose up --build
 docker-compose exec postgres psql -U postgres -d employ_data - c
 "SELECT COUNT(*) FROM employ_data;"
   
-
-- 
