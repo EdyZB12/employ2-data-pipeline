@@ -1,0 +1,29 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+#instala dependencias del sistema 
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+#copiar requirements e instalar dependecias de python
+
+COPY requirements.txt . 
+RUN pip install --no-cache-dir -r requirements.txt
+
+#copiar código 
+
+COPY scripts/ ./scripts/
+COPY data/ ./data/
+
+#crea directorio para logs
+
+RUN mkdir -p /app/logs
+
+#variable para el punto de entrada
+
+ENV PYTHONPATH=/app
+
+CMD ["python", "scripts/pipeline2ventasreals.py"]

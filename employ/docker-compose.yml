@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres: 
+    image: postgres:13
+    environment: 
+      POSTGRES_DB: employ_data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: TMHzabusito88
+    ports: 
+      - "5432:5432"
+    volumes: 
+      - postgres_data:/var/lib/postgres/employ_data
+      #- ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  pipeline: 
+    build: . 
+    environment:
+       DB_HOST: "postgres"
+       DB_PORT: "5432"
+       DB_USER: "postgres"
+       DB_PASSWORD: "TMHzabusito88"
+       DB_NAME: "employ_data"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes: 
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./logs:/app/logs
+    
+    container_name: pipeline_ventas_reales
+
+volumes:
+  postgres_data:
